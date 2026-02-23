@@ -80,7 +80,7 @@ export default function App() {
     gridClassName?: string;
   }) => (
     <div
-      className={`bg-[#0F172A] border border-[#1E293B] rounded-[10px] p-6 relative flex flex-col ${containerClassName}`}
+      className={`bg-[#0F172A] border border-[#1E293B] rounded-[10px] px-6 pt-6 pb-8 relative flex flex-col ${containerClassName}`}
     >
       {/* Thin top accent border */}
       <div
@@ -111,7 +111,7 @@ export default function App() {
 
       {/* Protocol Grid */}
       <div
-        className={`grid gap-4 flex-1 place-content-center ${gridClassName}`}
+        className={`grid gap-4 flex-1 place-content-center pb-2 ${gridClassName}`}
         style={{
           gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
         }}
@@ -119,7 +119,7 @@ export default function App() {
         {protocols.map((protocol, idx) => (
           <div
             key={idx}
-            className={`flex flex-col items-center justify-center relative p-3 min-h-[100px] overflow-hidden min-w-0 ${tileClassName}`}
+            className={`flex flex-col items-center justify-center relative p-2 min-h-[100px] overflow-hidden min-w-0 ${tileClassName}`}
           >
             {protocol[protocolTagKey] && (
               <span
@@ -133,22 +133,22 @@ export default function App() {
               <img
                 src={protocol.logoSrc}
                 alt={protocol.type}
-                className={`w-16 h-16 object-contain mb-2 shrink-0 ${logoClassName}`}
+                className={`w-30 h-16 object-contain shrink-0 mb-1.7 -mt-2 ${logoClassName}`}
               />
             ) : (
               <div
-                className={`w-14 h-14 rounded-full bg-[#0F172A] border border-[#1E293B] flex items-center justify-center mb-2 shrink-0 ${logoClassName}`}
+                className={`w-14 h-14 rounded-full bg-[#0F172A] border border-[#1E293B] flex items-center justify-center shrink-0 mb-2 -mt-1 ${logoClassName}`}
               >
                 <span className="text-sm font-semibold text-[#64748B]">
                   {protocol.name.substring(0, 2)}
                 </span>
               </div>
             )}
-            <div className="text-center w-full min-w-0 px-0.5">
+            <div className="text-center w-full min-w-0 overflow-hidden pb-1">
               <div className="text-sm font-semibold text-[#E2E8F0] truncate">
                 {protocol.name}
               </div>
-              <div className="text-xs text-[#64748B] truncate mt-0.5">
+              <div className="text-xs text-[#94A3B8] truncate mt-0.5">
                 {protocol.type}
               </div>
             </div>
