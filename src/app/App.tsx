@@ -18,6 +18,7 @@ const perenaLogo = new URL("./images/perena.svg", import.meta.url).href;
 const solayerLogo = new URL("./images/solayer.svg", import.meta.url).href;
 const solomonLogo = new URL("./images/solomon.svg", import.meta.url).href;
 const solsticeLogo = new URL("./images/solstice.svg", import.meta.url).href;
+const usdoLogo = new URL("./images/usdo-logo-dark.svg", import.meta.url).href;
 
 export default function App() {
   const treasuryProtocols = [
@@ -25,7 +26,7 @@ export default function App() {
     { name: "YLDS", type: "Figure", logoSrc: figureLogo },
     { name: "wYLDS", type: "Hastra", logoSrc: hastraLogo },
     { name: "sUSD", type: "Solayer", logoSrc: solayerLogo },
-    { name: "cUSDo", type: "OpenEden" },
+    { name: "cUSDo", type: "OpenEden", logoSrc: usdoLogo },
     { name: "JupUSD", type: "Jupiter", logoSrc: jupiterLogo },
     { name: "JIUSDC", type: "Jupiter Lend", logoSrc: jupiterLogo },
     { name: "JIUSDT", type: "Jupiter Lend", logoSrc: jupiterLogo },
@@ -80,7 +81,7 @@ export default function App() {
     gridClassName?: string;
   }) => (
     <div
-      className={`bg-[#0F172A] border border-[#1E293B] rounded-[10px] px-6 pt-6 pb-8 relative flex flex-col ${containerClassName}`}
+      className={`bg-[#0F172A] border border-[#1E293B] rounded-[10px] px-4 pt-4 pb-5 relative flex flex-col min-h-0 ${containerClassName}`}
     >
       {/* Thin top accent border */}
       <div
@@ -89,7 +90,7 @@ export default function App() {
       />
 
       {/* Section Header with APY */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-3">
           <div
             className="w-2 h-2 rounded-full"
@@ -111,7 +112,7 @@ export default function App() {
 
       {/* Protocol Grid */}
       <div
-        className={`grid gap-4 flex-1 place-content-center pb-2 ${gridClassName}`}
+        className={`grid gap-4 flex-1 place-content-center min-h-0 pb-1 ${gridClassName}`}
         style={{
           gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
         }}
@@ -119,7 +120,7 @@ export default function App() {
         {protocols.map((protocol, idx) => (
           <div
             key={idx}
-            className={`flex flex-col items-center justify-center relative p-2 min-h-[100px] overflow-hidden min-w-0 ${tileClassName}`}
+            className={`flex flex-col items-center justify-center relative pt-4 px-3 pb-3 min-h-0 overflow-visible min-w-0 ${tileClassName}`}
           >
             {protocol[protocolTagKey] && (
               <span
@@ -133,22 +134,22 @@ export default function App() {
               <img
                 src={protocol.logoSrc}
                 alt={protocol.type}
-                className={`w-30 h-16 object-contain shrink-0 mb-1.7 -mt-2 ${logoClassName}`}
+                className={`w-30 h-20 object-contain shrink-0 mb-3 ${logoClassName}`}
               />
             ) : (
               <div
-                className={`w-14 h-14 rounded-full bg-[#0F172A] border border-[#1E293B] flex items-center justify-center shrink-0 mb-2 -mt-1 ${logoClassName}`}
+                className={`w-20 h-20 rounded-full bg-[#0F172A] border border-[#1E293B] flex items-center justify-center shrink-0 mb-3 ${logoClassName}`}
               >
-                <span className="text-sm font-semibold text-[#64748B]">
+                <span className="text-base font-semibold text-[#64748B]">
                   {protocol.name.substring(0, 2)}
                 </span>
               </div>
             )}
-            <div className="text-center w-full min-w-0 overflow-hidden pb-1">
-              <div className="text-sm font-semibold text-[#E2E8F0] truncate">
+            <div className="text-center w-full min-w-0 overflow-visible">
+              <div className="text-sm font-semibold text-[#E2E8F0] truncate leading-tight">
                 {protocol.name}
               </div>
-              <div className="text-xs text-[#94A3B8] truncate mt-0.5">
+              <div className="text-sm font-medium text-[#94A3B8] mt-1.5 leading-tight truncate">
                 {protocol.type}
               </div>
             </div>
@@ -169,9 +170,9 @@ export default function App() {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col px-20 py-12">
+      <div className="relative z-10 h-full flex flex-col px-16 py-8 overflow-hidden">
         {/* Header: title and attribution on same line */}
-        <div className="mb-8">
+        <div className="mb-4 shrink-0">
           <div className="flex items-baseline justify-between gap-6">
             <h1
               className="text-[48px] font-bold text-[#F3F4F6]"
@@ -184,14 +185,14 @@ export default function App() {
               <div className="text-xs text-[#94A3B8]">Research · Altitude</div>
             </div>
           </div>
-          <p className="text-sm text-[#94A3B8] font-medium mt-3">
+          <p className="text-sm text-[#94A3B8] font-medium mt-2">
             Organized by yield source and risk profile – Risk
             increases left to right
           </p>
         </div>
 
         {/* Main Content: 5-5 / 3 | 3 / 8 layout */}
-        <div className="flex-1 flex flex-col gap-6 min-h-0">
+        <div className="flex-1 flex flex-col gap-4 min-h-0 overflow-hidden">
           {/* Row 1: Treasury full width — 5 + 5 blocks */}
           <Section
             title="TREASURY & RWA-BACKED"
@@ -202,7 +203,7 @@ export default function App() {
           />
 
           {/* Row 2: Left column 3/3, Right column 8 spanning full height */}
-          <div className="grid grid-cols-5 grid-rows-2 gap-6 flex-1 min-h-0">
+          <div className="grid grid-cols-5 grid-rows-2 gap-4 flex-1 min-h-0 overflow-hidden">
             {/* Left top: Institutional (3) */}
             <div className="col-span-2">
               <Section
@@ -240,7 +241,7 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <div className="pt-6 mt-6 border-t border-[#1E293B]">
+        <div className="pt-4 mt-4 border-t border-[#1E293B] shrink-0">
           <p className="text-xs text-[#64748B] text-center">
             Data as of Q1 2025 · Not financial advice · Yield estimates are approximations · Risk profiles subject to change · Always DYOR
           </p>
