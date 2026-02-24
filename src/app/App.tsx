@@ -19,11 +19,13 @@ const solayerLogo = new URL("./images/solayer.svg", import.meta.url).href;
 const solomonLogo = new URL("./images/solomon.svg", import.meta.url).href;
 const solsticeLogo = new URL("./images/solstice.svg", import.meta.url).href;
 const usdoLogo = new URL("./images/usdo-logo-dark.svg", import.meta.url).href;
+const usdplusLogo = new URL("./images/usdplus.jpg", import.meta.url).href;
 
 export default function App() {
   const treasuryProtocols = [
     { name: "USDY", type: "Ondo", logoSrc: ondoLogo },
     { name: "YLDS", type: "Figure", logoSrc: figureLogo },
+    { name: "USD+", type: "Streamflow", logoSrc: usdplusLogo },
     { name: "wYLDS", type: "Hastra", logoSrc: hastraLogo },
     { name: "sUSD", type: "Solayer", logoSrc: solayerLogo },
     { name: "cUSDo", type: "OpenEden", logoSrc: usdoLogo },
@@ -68,6 +70,7 @@ export default function App() {
     tileClassName = "",
     logoClassName = "",
     gridClassName = "",
+    staggered = false,
   }: {
     title: string;
     accentColor: string;
@@ -79,85 +82,109 @@ export default function App() {
     tileClassName?: string;
     logoClassName?: string;
     gridClassName?: string;
-  }) => (
-    <div
-      className={`bg-[#0F172A] border border-[#1E293B] rounded-[10px] px-4 pt-4 pb-5 relative flex flex-col min-h-0 ${containerClassName}`}
-    >
-      {/* Thin top accent border */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px] rounded-t-[10px]"
-        style={{ backgroundColor: accentColor }}
-      />
+    staggered?: boolean;
+  }) => {
+    const isStaggeredLayout = staggered && columns === 6 && protocols.length === 11;
+    const gridTemplateColumns = isStaggeredLayout
+      ? "repeat(12, minmax(0, 1fr))"
+      : `repeat(${columns}, minmax(0, 1fr))`;
 
-      {/* Section Header with APY */}
-      <div className="flex items-center justify-between mb-4 shrink-0">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-2 h-2 rounded-full"
-            style={{ backgroundColor: accentColor }}
-          />
-          <h2 className="text-base font-semibold text-[#F3F4F6] uppercase tracking-wide">
-            {title}
-          </h2>
-        </div>
-        {apy && (
-          <span
-            className="text-xs font-semibold px-3 py-1 rounded"
-            style={{ backgroundColor: accentColor, color: "#fff" }}
-          >
-            {apy}
-          </span>
-        )}
-      </div>
-
-      {/* Protocol Grid */}
+    return (
       <div
-        className={`grid gap-4 flex-1 place-content-center min-h-0 pb-1 ${gridClassName}`}
-        style={{
-          gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-        }}
+        className={`bg-[#0F172A] border border-[#1E293B] rounded-[10px] px-4 pt-4 pb-5 relative flex flex-col min-h-0 ${containerClassName}`}
       >
-        {protocols.map((protocol, idx) => (
-          <div
-            key={idx}
-            className={`flex flex-col items-center justify-center relative pt-4 px-3 pb-3 min-h-0 overflow-visible min-w-0 ${tileClassName}`}
-          >
-            {protocol[protocolTagKey] && (
-              <span
-                className="absolute top-1 right-1 text-[9px] font-semibold px-1.5 py-0.5 rounded shrink-0 z-10"
-                style={{ backgroundColor: accentColor, color: "#fff" }}
-              >
-                {protocol[protocolTagKey]}
-              </span>
-            )}
-            {protocol.logoSrc ? (
-              <img
-                src={protocol.logoSrc}
-                alt={protocol.type}
-                className={`w-30 h-20 object-contain shrink-0 mb-3 ${logoClassName}`}
-              />
-            ) : (
-              <div
-                className={`w-20 h-20 rounded-full bg-[#0F172A] border border-[#1E293B] flex items-center justify-center shrink-0 mb-3 ${logoClassName}`}
-              >
-                <span className="text-base font-semibold text-[#64748B]">
-                  {protocol.name.substring(0, 2)}
-                </span>
-              </div>
-            )}
-            <div className="text-center w-full min-w-0 overflow-visible">
-              <div className="text-sm font-semibold text-[#E2E8F0] truncate leading-tight">
-                {protocol.name}
-              </div>
-              <div className="text-sm font-medium text-[#94A3B8] mt-1.5 leading-tight truncate">
-                {protocol.type}
-              </div>
-            </div>
+        {/* Thin top accent border */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px] rounded-t-[10px]"
+          style={{ backgroundColor: accentColor }}
+        />
+
+        {/* Section Header with APY */}
+        <div className="flex items-center justify-between mb-4 shrink-0">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: accentColor }}
+            />
+            <h2 className="text-base font-semibold text-[#F3F4F6] uppercase tracking-wide">
+              {title}
+            </h2>
           </div>
-        ))}
+          {apy && (
+            <span
+              className="text-xs font-semibold px-3 py-1 rounded"
+              style={{ backgroundColor: accentColor, color: "#fff" }}
+            >
+              {apy}
+            </span>
+          )}
+        </div>
+
+        {/* Protocol Grid */}
+        <div
+          className={`grid gap-4 flex-1 place-content-center min-h-0 pb-1 ${gridClassName}`}
+          style={{
+            gridTemplateColumns,
+          }}
+        >
+          {protocols.map((protocol, idx) => {
+            let tileStyle: React.CSSProperties | undefined;
+
+            if (isStaggeredLayout) {
+              if (idx < 6) {
+                const colStart = idx * 2 + 1; // 1,3,5,7,9,11
+                tileStyle = { gridColumn: `${colStart} / span 2` };
+              } else {
+                const j = idx - 6;
+                const colStart = j * 2 + 2; // 2,4,6,8,10 for items 7-11
+                tileStyle = { gridColumn: `${colStart} / span 2` };
+              }
+            }
+
+            return (
+              <div
+                key={idx}
+                className={`flex flex-col items-center justify-center relative pt-4 px-3 pb-3 min-h-0 overflow-visible min-w-0 ${tileClassName}`}
+                style={tileStyle}
+              >
+                {protocol[protocolTagKey] && (
+                  <span
+                    className="absolute top-1 right-1 text-[9px] font-semibold px-1.5 py-0.5 rounded shrink-0 z-10"
+                    style={{ backgroundColor: accentColor, color: "#fff" }}
+                  >
+                    {protocol[protocolTagKey]}
+                  </span>
+                )}
+                {protocol.logoSrc ? (
+                  <img
+                    src={protocol.logoSrc}
+                    alt={protocol.type}
+                    className={`w-36 h-20 object-contain shrink-0 mb-3 ${logoClassName}`}
+                  />
+                ) : (
+                  <div
+                    className={`w-20 h-20 rounded-full bg-[#0F172A] border border-[#1E293B] flex items-center justify-center shrink-0 mb-3 ${logoClassName}`}
+                  >
+                    <span className="text-base font-semibold text-[#64748B]">
+                      {protocol.name.substring(0, 2)}
+                    </span>
+                  </div>
+                )}
+                <div className="text-center w-full min-w-0 overflow-visible">
+                  <div className="text-sm font-semibold text-[#E2E8F0] truncate leading-tight">
+                    {protocol.name}
+                  </div>
+                  <div className="text-sm font-medium text-[#94A3B8] mt-1.5 leading-tight truncate">
+                    {protocol.type}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="w-[1980px] h-[1080px] bg-[#0A0F1C] relative overflow-hidden">
@@ -182,12 +209,10 @@ export default function App() {
             </h1>
             <div className="text-right shrink-0">
               <div className="text-sm font-semibold text-[#F3F4F6]">@arifkazi_</div>
-              <div className="text-xs text-[#94A3B8]">Research · Altitude</div>
             </div>
           </div>
           <p className="text-sm text-[#94A3B8] font-medium mt-2">
-            Organized by yield source and risk profile – Risk
-            increases left to right
+           
           </p>
         </div>
 
@@ -198,8 +223,9 @@ export default function App() {
             title="TREASURY & RWA-BACKED"
             accentColor="#3A7D44"
             protocols={treasuryProtocols}
-            columns={5}
+            columns={6}
             apy="~4-5% APY"
+            staggered
           />
 
           {/* Row 2: Left column 3/3, Right column 8 spanning full height */}
@@ -240,12 +266,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="pt-4 mt-4 border-t border-[#1E293B] shrink-0">
-          <p className="text-xs text-[#64748B] text-center">
-            Data as of Q1 2025 · Not financial advice · Yield estimates are approximations · Risk profiles subject to change · Always DYOR
-          </p>
-        </div>
+        {/* Footer removed per design request */}
       </div>
     </div>
   );
