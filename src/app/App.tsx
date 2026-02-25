@@ -20,6 +20,8 @@ const solomonLogo = new URL("./images/solomon.svg", import.meta.url).href;
 const solsticeLogo = new URL("./images/solstice.svg", import.meta.url).href;
 const usdoLogo = new URL("./images/usdo-logo-dark.svg", import.meta.url).href;
 const usdplusLogo = new URL("./images/usdplus.jpg", import.meta.url).href;
+const carrotLogo = new URL("./images/carrot.svg", import.meta.url).href;
+const susdsLogo = new URL("./images/susds.svg", import.meta.url).href;
 
 export default function App() {
   const treasuryProtocols = [
@@ -29,6 +31,8 @@ export default function App() {
     { name: "wYLDS", type: "Hastra", logoSrc: hastraLogo },
     { name: "sUSD", type: "Solayer", logoSrc: solayerLogo },
     { name: "cUSDo", type: "OpenEden", logoSrc: usdoLogo },
+    { name: "CRT", type: "Defi Carrot", logoSrc: carrotLogo },
+    { name: "sUSDS", type: "Sky", logoSrc: susdsLogo },
     { name: "JupUSD", type: "Jupiter", logoSrc: jupiterLogo },
     { name: "JIUSDC", type: "Jupiter Lend", logoSrc: jupiterLogo },
     { name: "JIUSDT", type: "Jupiter Lend", logoSrc: jupiterLogo },
@@ -84,9 +88,11 @@ export default function App() {
     gridClassName?: string;
     staggered?: boolean;
   }) => {
-    const isStaggeredLayout = staggered && columns === 6 && protocols.length === 11;
+    // Staggered layout is currently customized for the Treasury section only.
+    // It expects 7 items in the first row and 6 in the second row.
+    const isStaggeredLayout = staggered && columns === 7 && protocols.length >= 13;
     const gridTemplateColumns = isStaggeredLayout
-      ? "repeat(12, minmax(0, 1fr))"
+      ? "repeat(14, minmax(0, 1fr))"
       : `repeat(${columns}, minmax(0, 1fr))`;
 
     return (
@@ -131,12 +137,14 @@ export default function App() {
             let tileStyle: React.CSSProperties | undefined;
 
             if (isStaggeredLayout) {
-              if (idx < 6) {
-                const colStart = idx * 2 + 1; // 1,3,5,7,9,11
+              if (idx < 7) {
+                // First row: 7 items on odd columns (1,3,5,7,9,11,13)
+                const colStart = idx * 2 + 1;
                 tileStyle = { gridColumn: `${colStart} / span 2` };
-              } else {
-                const j = idx - 6;
-                const colStart = j * 2 + 2; // 2,4,6,8,10 for items 7-11
+              } else if (idx < 13) {
+                // Second row: 6 items on even columns (2,4,6,8,10,12)
+                const j = idx - 7;
+                const colStart = j * 2 + 2;
                 tileStyle = { gridColumn: `${colStart} / span 2` };
               }
             }
@@ -218,12 +226,12 @@ export default function App() {
 
         {/* Main Content: 5-5 / 3 | 3 / 8 layout */}
         <div className="flex-1 flex flex-col gap-4 min-h-0 overflow-hidden">
-          {/* Row 1: Treasury full width — 5 + 5 blocks */}
+          {/* Row 1: Treasury full width — staggered 7 + 6 layout */}
           <Section
             title="TREASURY & RWA-BACKED"
             accentColor="#3A7D44"
             protocols={treasuryProtocols}
-            columns={6}
+            columns={7}
             apy="~4-5% APY"
             staggered
           />
