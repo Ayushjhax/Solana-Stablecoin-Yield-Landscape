@@ -195,7 +195,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-[1980px] h-[1080px] bg-[#0A0F1C] relative overflow-hidden">
+    <div className="w-[2500px] h-[1000px] bg-[#0A0F1C] relative overflow-hidden">
       {/* Subtle radial vignette */}
       <div
         className="absolute inset-0"
